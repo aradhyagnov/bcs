@@ -49,7 +49,6 @@
 ## Visualizations
 
 
-
 - Axial Slice Example
 - Coronal Slice
 - Sagittal View

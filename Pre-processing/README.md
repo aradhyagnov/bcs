@@ -33,8 +33,6 @@ High-quality preprocessing is essential to ensure reliable deep learning perform
 3. **Skull Stripping (Brain Extraction)**  
   To isolate the brain from surrounding anatomical structures, a skull stripping procedure is applied to each MRI volume. BET works by identifying and removing non-brain tissues such as the skull, scalp, neck, and cerebrospinal fluid. This step is essential for eliminating irrelevant regions that could introduce noise or bias into the model’s learning process. By focusing exclusively on brain tissue, the model can better detect structural changes and patterns that are meaningful for diagnosing Alzheimer’s Disease
 
-4. **Standardization to BIDS Format**  
-  To ensure data consistency and enable reproducible analysis, the raw MRI data from the ADNI dataset is converted into the Brain Imaging Data Structure (BIDS) format.The process includes automatic filtering of poor-quality scans, selection of preferred acquisitions, and formatting of subject/session metadata. Alongside this, PyBIDS—a Python library—is used to efficiently query and manage BIDS-organized datasets within the analysis pipeline. Adopting the BIDS standard not only enhances compatibility with a broad ecosystem of neuroimaging tools but also simplifies data sharing and promotes transparency and reproducibility across studies.
 ---
 
 ### Model Architecture

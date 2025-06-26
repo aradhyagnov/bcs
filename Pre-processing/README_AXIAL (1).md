@@ -9,16 +9,13 @@ Accurate early diagnosis of Alzheimer’s Disease (AD) remains a clinical challe
 This project introduces a preprocessing and classification pipeline based on the AXIAL framework to:
 - Enable interpretable AD diagnosis from 3D MRI data.
 - Generate 3D attention maps localizing disease-affected brain regions.
-- Use 2D CNNs with attention fusion to balance performance and explainability.
 
 ---
 
 
 ## ⚙️ Methodology
 
-This section elaborates on the complete methodology adapted from the AXIAL paper and customized for this implementation.
 
-### Overview
 The AXIAL pipeline introduces a diagnosis and explainability framework that processes 3D MRI brain scans as a sequence of 2D slices, applying attention mechanisms to identify both diagnosis and region-specific explanations. This enables precise and interpretable Alzheimer’s Disease classification.
 
 ---
@@ -28,22 +25,16 @@ The AXIAL pipeline introduces a diagnosis and explainability framework that proc
 High-quality preprocessing is essential to ensure reliable deep learning performance. The original AXIAL study employed the following steps:
 
 1. **Bias Field Correction (Skipped)**  
-   - **Original**: N4ITK (Tustison et al., 2010) was used to correct intensity inhomogeneities.
-   - **Modified**: We skipped this step because N3 bias field correction had already been applied in our dataset.
+   We skipped this step because N3 bias field correction had already been applied in our dataset.
 
 2. **Affine Registration to MNI152 Space**  
-   - **Tool**: ANTs (SyN algorithm)
-   - **Template**: ICBM 2009c nonlinear symmetric
-   - **Purpose**: Aligns MRI volumes from different subjects to a standard anatomical space to allow inter-subject comparability.
+   To ensure consistency across different subjects’ MRI scans, each image is aligned to a common anatomical reference frame using affine registration. This  process is carried out by employing the Symmetric Normalization (SyN) algorithm—an efficient and accurate registration method. The target template used for this alignment is the ICBM 2009c nonlinear symmetric brain atlas, which serves as a standardized anatomical space. Registering all images to this template allows for meaningful voxel-wise comparisons and consistent spatial correspondence across subjects. This step is critical for enabling the model to learn generalized spatial patterns related to Alzheimer’s Disease rather than subject-specific anatomical variations.
 
 3. **Skull Stripping (Brain Extraction)**  
-   - **Tool**: FSL BET (Smith, 2002)
-   - **Purpose**: Removes non-brain tissues such as the skull, scalp, and neck to focus the model on brain tissue.
+  To isolate the brain from surrounding anatomical structures, a skull stripping procedure is applied to each MRI volume. BET works by identifying and removing non-brain tissues such as the skull, scalp, neck, and cerebrospinal fluid. This step is essential for eliminating irrelevant regions that could introduce noise or bias into the model’s learning process. By focusing exclusively on brain tissue, the model can better detect structural changes and patterns that are meaningful for diagnosing Alzheimer’s Disease
 
 4. **Standardization to BIDS Format**  
-   - **Tool**: Clinica and PyBIDS
-   - **Purpose**: Converts raw ADNI data into Brain Imaging Data Structure (BIDS) format to promote reproducibility and compatibility with neuroimaging pipelines.
-
+  To ensure data consistency and enable reproducible analysis, the raw MRI data from the ADNI dataset is converted into the Brain Imaging Data Structure (BIDS) format.The process includes automatic filtering of poor-quality scans, selection of preferred acquisitions, and formatting of subject/session metadata. Alongside this, PyBIDS—a Python library—is used to efficiently query and manage BIDS-organized datasets within the analysis pipeline. Adopting the BIDS standard not only enhances compatibility with a broad ecosystem of neuroimaging tools but also simplifies data sharing and promotes transparency and reproducibility across studies.
 ---
 
 ### Model Architecture
@@ -56,7 +47,7 @@ High-quality preprocessing is essential to ensure reliable deep learning perform
 
 #### 2. Attention XAI Fusion Module
 
-- **Goal**: Learn the relative importance of each slice in the overall 3D MRI volume.
+- **Aim**: Learn the relative importance of each slice in the overall 3D MRI volume.
 - **Mechanism**:
   - A fully connected layer outputs unnormalized attention weights.
   - A softmax function normalizes the weights.
@@ -71,8 +62,7 @@ High-quality preprocessing is essential to ensure reliable deep learning perform
 #### 4. XAI Attention Map Generation
 
 - Separate diagnosis+attention networks are trained for each slicing plane: axial, sagittal, coronal.
-- Attention scores from all three planes are combined to generate a 3D attention heatmap using:
-  - \( A[i,j,k] = lpha_s[i] \cdot lpha_c[j] \cdot lpha_a[k] \)
+- Attention scores from all three planes are combined to generate a 3D attention heatmap
 - The attention map is min-max normalized.
 
 #### 5. Brain Region Quantification

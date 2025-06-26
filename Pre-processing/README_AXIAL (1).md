@@ -67,21 +67,16 @@ High-quality preprocessing is essential to ensure reliable deep learning perform
 
 #### 5. Brain Region Quantification
 
-- **Overlay**: 3D attention map is overlaid on normalized MNI152-space MRI volume.
-- **Atlas Mapping**: Each activated voxel is mapped to anatomical brain regions using a labeled brain atlas.
-- **Statistics Computed**:
-  - Mean, Max, Std of attention scores per region
-  - Region overlap volume
-  - Percentage of region activated
-
----
-
-### Training and Evaluation
-
-- **Cross-validation**: 5-fold subject-level split to ensure no data leakage.
-- **Augmentation**: Random flipping of slices (p = 0.3).
-- **Optimizer**: AdamW with LR = 1e-4 (fine-tuning) and 1e-5 (transfer learning).
-- **Metrics**: Accuracy, Sensitivity, Specificity, Matthews Correlation Coefficient (MCC).
+-**Overlay**:
+The 3D attention map is overlaid onto the subject’s MRI scan, which has been normalized to the MNI152 template. This ensures anatomical consistency across subjects.
+-**Atlas Mapping**:
+A brain atlas is used to map each activated voxel in the attention map to a specific anatomical brain region, allowing interpretation of model focus in clinically meaningful terms.
+-**Statistics Computed per Region**:
+Mean attention score: Average importance assigned to the region by the model.
+Maximum and minimum attention values: Highlight the most and least activated points within the region.
+Standard deviation: Measures variability in attention distribution across the region.
+Overlap volume (Vr): Total number of voxels in a region that intersect with the attention map.
+Percentage of region activated (Pr): Indicates how much of the region is highlighted as relevant by the model, helping to assess diagnostic saliency.
 
 ---
 
@@ -93,17 +88,6 @@ The pipeline employs **Double Transfer Learning** for sMCI vs pMCI prediction:
 3. This hierarchical strategy improves generalization and focuses learning on subtle morphological changes.
 
 
-### Preprocessing Steps
-
-1. **Affine Registration**  
-   - Tool: ANTs (SyN)  
-   - Goal: Align images to MNI152 standard space using the ICBM 2009c template.
-
-2. **Skull Stripping**  
-   - Tool: FSL BET  
-   - Goal: Remove non-brain tissue.
-
-🛈 **Note**: We skipped the N4 bias field correction step used in the AXIAL paper because our dataset already includes N3 bias field correction. This avoids redundant intensity normalization.
 
 ### Tools & Libraries
 - PyTorch
@@ -114,11 +98,6 @@ The pipeline employs **Double Transfer Learning** for sMCI vs pMCI prediction:
 
 ### Parameter Choices
 - Backbone: VGG16 (best performance)
-- Slice count: 80
-- Freezing: 50% of backbone layers
-- Batch size: 8
-- Learning rate: 1e-4 (initial), 1e-5 (transfer learning)
-- Attention threshold: 99.9th percentile for heatmap binarization
 
 Justification: These configurations were found optimal through ablation experiments and cross-validation.
 

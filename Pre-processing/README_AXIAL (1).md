@@ -67,16 +67,16 @@ High-quality preprocessing is essential to ensure reliable deep learning perform
 
 #### 5. Brain Region Quantification
 
--**Overlay**:
+- **Overlay** :
 The 3D attention map is overlaid onto the subject’s MRI scan, which has been normalized to the MNI152 template. This ensures anatomical consistency across subjects.
--**Atlas Mapping**:
+- **Atlas Mapping**:
 A brain atlas is used to map each activated voxel in the attention map to a specific anatomical brain region, allowing interpretation of model focus in clinically meaningful terms.
--**Statistics Computed per Region**:
-Mean attention score: Average importance assigned to the region by the model.
-Maximum and minimum attention values: Highlight the most and least activated points within the region.
-Standard deviation: Measures variability in attention distribution across the region.
-Overlap volume (Vr): Total number of voxels in a region that intersect with the attention map.
-Percentage of region activated (Pr): Indicates how much of the region is highlighted as relevant by the model, helping to assess diagnostic saliency.
+- **Statistics Computed per Region**:
+-Mean attention score: Average importance assigned to the region by the model.
+-Maximum and minimum attention values: Highlight the most and least activated points within the region.
+-Standard deviation: Measures variability in attention distribution across the region.
+-Overlap volume (Vr): Total number of voxels in a region that intersect with the attention map.
+-Percentage of region activated (Pr): Indicates how much of the region is highlighted as relevant by the model, helping to assess diagnostic saliency.
 
 ---
 

@@ -89,8 +89,7 @@ The pipeline employs **Double Transfer Learning** for sMCI vs pMCI prediction:
 
 ### Tools & Libraries
 - PyTorch
-- ANTs, FSL (via Clinica)
-- PyBIDS for BIDS conversion
+- ANTs, FSL
 - Matplotlib, Seaborn (for visualizations)
 - Nibabel, Nilearn (for neuroimaging I/O)
 
